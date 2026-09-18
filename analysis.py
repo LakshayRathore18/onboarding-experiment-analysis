@@ -64,6 +64,13 @@ def q3_mix_adjusted_lift(df: pd.DataFrame):
     return round(mix_adj * 100, 2), detail
 
 
+def q4_real_effect(segment_rows: list) -> str:
+    candidates = [r for r in segment_rows if r["lift_pp"] > 0 and r["z_score"] > 1.96]
+    if not candidates:
+        return "none"
+    return max(candidates, key=lambda r: r["z_score"])["segment"]
+
+
 def q5_assignment_ratios(df: pd.DataFrame):
     ratio = df.groupby("segment")["variant"].value_counts(normalize=True).unstack()
     return ratio.round(4)
@@ -85,6 +92,9 @@ def main():
     for d in q3_detail:
         print(" ", d)
 
+    q4_segment = q4_real_effect(q2)
+    print("\nQ4 - segment with real positive effect:", q4_segment)
+
     print("\nQ5 - assignment ratio (fraction of segment in each variant):")
     print(q5_assignment_ratios(df))
 
@@ -94,7 +104,7 @@ def main():
         "q1_n_treatment": int(q1["n_treatment"]),
         "q2_untrustworthy_segment": "influencer",
         "q3_mix_adjusted_lift_pp": float(q3_val),
-        "q4_real_effect_segment": "app_store",
+        "q4_real_effect_segment": q4_segment,
     }
     with open("answers.json", "w") as f:
         json.dump(answers, f, indent=2)
