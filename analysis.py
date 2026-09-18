@@ -1,14 +1,3 @@
-"""
-Onboarding Experiment Investigation
-------------------------------------
-Reproduces every number reported in ANSWERS.md / answers.json from
-experiment_results.csv (not included in this submission per the assignment
-instructions -- place your own copy alongside this script to re-run it).
-
-Usage:
-    python analysis.py
-"""
-
 import json
 import math
 
